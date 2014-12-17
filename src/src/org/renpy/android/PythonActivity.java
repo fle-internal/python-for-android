@@ -119,7 +119,7 @@ public class PythonActivity extends Activity implements Runnable {
             mPath = getFilesDir();
         }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//eli        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // go to fullscreen mode if requested
         try {
