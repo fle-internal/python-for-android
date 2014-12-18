@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="{{args.package}}"
-          android:versionCode="{{args.numeric_version}}"
+          android:versionCode="{{1203}}"
           android:versionName="{{args.version}}"
           android:installLocation="{{ args.install_location }}"
           >
@@ -16,24 +16,24 @@
         {% endif %}
         />
 
-  <application android:label="@string/appName"
+  <application android:label="Connect.Teaching"
                android:icon="@drawable/icon"
-			   android:hardwareAccelerated="true"
+         android:hardwareAccelerated="true"
                >
 
-	{% for m in args.meta_data %}
-	<meta-data android:name="{{ m.split('=', 1)[0] }}" android:value="{{ m.split('=', 1)[-1] }}"/>{% endfor %}
+  {% for m in args.meta_data %}
+  <meta-data android:name="{{ m.split('=', 1)[0] }}" android:value="{{ m.split('=', 1)[-1] }}"/>{% endfor %}
     <meta-data android:name="fullscreen" android:value="{% if args.window %}0{% else %}1{% endif %}"/>
     <meta-data android:name="wakelock" android:value="{% if args.wakelock %}1{% else %}0{% endif %}"/>
 
 
     <activity android:name="org.renpy.android.PythonActivity"
               android:label="@string/iconName"
-			  android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale|uiMode{% if args.min_sdk_version >= 13 %}|screenSize{% endif %}"
+        android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale|uiMode{% if args.min_sdk_version >= 13 %}|screenSize{% endif %}"
               android:launchMode="singleTask"
               android:process=":python"
               android:screenOrientation="{{ args.orientation }}"
-              android:windowSoftInputMode="stateAlwaysHidden"
+              android:windowSoftInputMode="adjustResize"
             >
 
       {% if args.launcher %}
@@ -77,30 +77,34 @@
 
     {% if service or args.launcher %}
     <service android:name="org.renpy.android.PythonService"
-             android:process=":PythonService"/>
+             android:process=":PythonService"
+             android:stopWithTask="true"/>
     {% endif %}
 
-	{% if args.billing_pubkey %}
-	<service android:name="org.renpy.android.billing.BillingService"
-		android:process=":python" />
-	<receiver
-		android:name="org.renpy.android.billing.BillingReceiver"
-		android:process=":python">
-		<intent-filter>
-			<action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
-			<action android:name="com.android.vending.billing.RESPONSE_CODE" />
-			<action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
-		</intent-filter>
-	</receiver>
-	{% endif %}
+  {% if args.billing_pubkey %}
+  <service android:name="org.renpy.android.billing.BillingService"
+    android:process=":python" />
+  <receiver
+    android:name="org.renpy.android.billing.BillingReceiver"
+    android:process=":python">
+    <intent-filter>
+      <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+      <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+      <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+    </intent-filter>
+  </receiver>
+  {% endif %}
+
 
   </application>
 
-  <uses-sdk android:minSdkVersion="{{ args.min_sdk_version }}" android:targetSdkVersion="{{ args.sdk_version }}"/>
+  <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="14"/>
   {% if args.wakelock %}
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   {% endif %}
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   {% for perm in args.permissions %}
   {% if '.' in perm %}

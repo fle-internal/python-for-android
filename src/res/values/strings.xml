@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="appName">Kivy Launcher</string>
-<string name="iconName">Kivy Launcher</string>
+<string name="appName">Connect.Teaching</string>
+<string name="iconName">Connect.Teaching</string>
 
-<string name="private_version">1323531558.3</string>
+<string name="private_version">1418863621.72</string>
 
+
+<string name="public_version">1418863621.72</string>
 
 <string name="urlScheme">kivy</string>
+
+
 </resources>

@@ -71,6 +71,7 @@ public class PythonActivity extends Activity implements Runnable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         Hardware.context = this;
         Action.context = this;
@@ -119,17 +120,16 @@ public class PythonActivity extends Activity implements Runnable {
             mPath = getFilesDir();
         }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         // go to fullscreen mode if requested
         try {
             this.mInfo = this.getPackageManager().getApplicationInfo(
                     this.getPackageName(), PackageManager.GET_META_DATA);
-            Log.v("python", "metadata fullscreen is" + this.mInfo.metaData.get("fullscreen"));
-            if ( (Integer)this.mInfo.metaData.get("fullscreen") == 1 ) {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            }
+            //we don't want fullscreen, because the windowSoftInputMode won't work under fullscreen
+            // Log.v("python", "metadata fullscreen is" + this.mInfo.metaData.get("fullscreen"));
+            // if ( (Integer)this.mInfo.metaData.get("fullscreen") == 1 ) {
+            //     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            //             WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            // }
         } catch (PackageManager.NameNotFoundException e) {
         }
 

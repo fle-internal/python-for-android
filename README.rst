@@ -32,6 +32,7 @@ Global overview
     export ANDROIDNDKVER=r8c
     export ANDROIDAPI=14
 
+! It is important to set the API to 14, otherwise it wouldn't work !
  (Of course correct the paths mentioned in ANDROIDSDK and ANDROIDNDK)
 
 #. Clone python-for-android::
