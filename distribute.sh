@@ -42,6 +42,12 @@ if [ "X$VIRTUALENV_NAME" == "X" ]; then
 	VIRTUALENV_NAME="$(which virtualenv)"
 fi
 
+# Resolve Cython path
+CYTHON="$(which cython2)"
+if [ "X$CYTHON" == "X" ]; then
+        CYTHON="$(which cython)"
+fi
+
 # Paths
 ROOT_PATH="$(dirname $($PYTHON -c 'from __future__ import print_function; import os,sys;print(os.path.realpath(sys.argv[1]))' $0))"
 RECIPES_PATH="$ROOT_PATH/recipes"
@@ -54,7 +60,7 @@ JNI_PATH="$SRC_PATH/jni"
 DIST_PATH="$ROOT_PATH/dist/default"
 SITEPACKAGES_PATH="$BUILD_PATH/python-install/lib/python2.7/site-packages/"
 HOSTPYTHON="$BUILD_PATH/python-install/bin/python.host"
-CYTHON="cython -t"
+CYTHON+=" -t"
 
 # Tools
 export LIBLINK_PATH="$BUILD_PATH/objects"
@@ -192,8 +198,11 @@ function push_arm() {
         export TOOLCHAIN_PREFIX=arm-linux-androideabi
         export TOOLCHAIN_VERSION=4.4.3
     elif  [ "X${ANDROIDNDKVER:0:2}" == "Xr9" ]; then
-            export TOOLCHAIN_PREFIX=arm-linux-androideabi
-            export TOOLCHAIN_VERSION=4.8
+        export TOOLCHAIN_PREFIX=arm-linux-androideabi
+        export TOOLCHAIN_VERSION=4.8
+    elif [ "X${ANDROIDNDKVER:0:3}" == "Xr10" ]; then
+        export TOOLCHAIN_PREFIX=arm-linux-androideabi
+        export TOOLCHAIN_VERSION=4.9
     else
         echo "Error: Please report issue to enable support for newer ndk."
         exit 1
@@ -220,6 +229,9 @@ function push_arm() {
 	export STRIP="$TOOLCHAIN_PREFIX-strip --strip-unneeded"
 	export MAKE="make -j5"
 	export READELF="$TOOLCHAIN_PREFIX-readelf"
+
+	# This will need to be updated to support Python versions other than 2.7
+	export BUILDLIB_PATH="$BUILD_hostpython/build/lib.linux-`uname -m`-2.7/"
 
 	# Use ccache ?
 	which ccache &>/dev/null
@@ -543,6 +555,10 @@ function run_get_packages() {
 			try mkdir -p $BUILD_PATH/$module
 		fi
 
+		if [ ! -d "$PACKAGES_PATH/$module" ]; then
+			try mkdir -p "$PACKAGES_PATH/$module"
+		fi
+
 		if [ "X$url" == "X" ]; then
 			debug "No package for $module"
 			continue
@@ -552,7 +568,7 @@ function run_get_packages() {
 		marker_filename=".mark-$filename"
 		do_download=1
 
-		cd $PACKAGES_PATH
+		cd "$PACKAGES_PATH/$module"
 
 		# check if the file is already present
 		if [ -f $filename ]; then
@@ -622,7 +638,7 @@ function run_get_packages() {
 		fi
 
 		# decompress
-		pfilename=$PACKAGES_PATH/$filename
+		pfilename=$PACKAGES_PATH/$module/$filename
 		info "Extract $pfilename"
 		case $pfilename in
 			*.tar.gz|*.tgz )
