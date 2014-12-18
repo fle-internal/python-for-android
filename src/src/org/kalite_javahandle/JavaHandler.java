@@ -19,7 +19,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
 //for unzipping
-//import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -47,7 +46,6 @@ import java.io.OutputStreamWriter;
 
 import android.widget.Toast;
 import java.lang.Thread;
-//import org.jshybugger.DebugServiceClient;
 
 //webview
 import android.widget.FrameLayout;
@@ -99,7 +97,6 @@ public class JavaHandler {
 				if(f.isDirectory()){
 					if(!f.getPath().contains("org.kalite.test")){
 						if(f.getName().equals("ka-lite")){
-							System.out.println("lalala found: " + f.getPath());
 							content_data_path = f.getPath();
 							break;
 						}
@@ -121,7 +118,6 @@ public class JavaHandler {
 	}
 
 	public static void movingDataSqlite(){
-		System.out.println("datadata sqlite in");
 		String data_sqlite_path = Environment.getExternalStorageDirectory().getPath() + "/org.kalite.test/ka-lite/kalite/database";
 		String data_sqlite_destination = Environment.getExternalStorageDirectory().getPath() + "/kalite_essential";
 
@@ -136,16 +132,7 @@ public class JavaHandler {
 			SQLiteDatabase db = SQLiteDatabase.openDatabase(data_sqlite_destination+"/data.sqlite", null, 0);
 			String myQuery = "SELECT id FROM securesync_device WHERE id='49c04a1ff93b5de0b5f3d99340346210';";
 			Cursor cursor = db.rawQuery(myQuery, null);
-			// if(cursor == null){
-			// 	System.out.println("good_datasqlite !!!");
-			// }else{
-			// 	System.out.println("bad_datasqlite ininin" + cursor.getCount());
-			// 	cursor.moveToFirst(); 
-			// 	int idColumn = cursor.getColumnIndex("id");
-			// 	System.out.println("bad_datasqlite cursor ! ! ! " + cursor.getString(idColumn));
-			// }
 			if(cursor.getCount() > 0){
-				System.out.println("bad_datasqlite found ! ! !");
 				File bad_datasqlite = new File(data_sqlite_destination+"/data.sqlite");
 				bad_datasqlite.delete();
 
@@ -154,11 +141,9 @@ public class JavaHandler {
 				file_mover_1 = null;
 			}
 		}
-		System.out.println("datadata sqlite finished");
 	}
 
 	public static boolean movingFile(){
-		System.out.println("momomo movingFile start..");
 		String copied_content = Environment.getExternalStorageDirectory().getPath() + "/org.kalite.test/copied_kalite_content";
 	    String moving = "null";
 	    File dir_ainol = new File("/mnt/sd-ext/ka-lite");//this folder has to have unique name
@@ -180,7 +165,6 @@ public class JavaHandler {
 
 				return false;
 			}
-			System.out.println("movingFile universal: "+content_data_path);
 		}
 
 		File sourceFile = new File(moving);
@@ -246,7 +230,6 @@ public class JavaHandler {
 				    }
 				    in.close();
 				    out.close();
-				    System.out.println("momomo close");
 				}
 		    }catch(IOException ex){
 		        ex.printStackTrace(); 
@@ -255,7 +238,6 @@ public class JavaHandler {
 		
 		public void start_moving() {
 		   	copyDir(_targetFile, _destination);
-		   	System.out.println("momomo finished moving files");
 		}
 	}
 
@@ -296,7 +278,6 @@ public class JavaHandler {
 				}
 				ze = zin.getNextEntry();
 			}
-			System.out.println("elieli done");
 			zin.close();
 			return new File(_zipFile).delete(); 
 		} catch (Exception e) {
@@ -306,7 +287,6 @@ public class JavaHandler {
 	}
 
 	public static void generateRSA(){
-		System.out.println("elieli in"); 
 		try { 
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA"); 
             keyGen.initialize(2048); 
@@ -350,7 +330,6 @@ public class JavaHandler {
             
             String fileLocation2 = Environment.getExternalStorageDirectory().getPath() + "/org.kalite.test/ka-lite/kalite/";
             File myFile = new File(fileLocation2 , "local_settings.py");
-            System.out.println("elieli ok so far 1"); 
             if(myFile.exists())
             {
                try
@@ -360,7 +339,6 @@ public class JavaHandler {
                     myOutWriter.append(gut);
                     myOutWriter.close();
                     fOut.close();
-                    System.out.println("elieli key done"); 
                 } catch(Exception e)
                 {
 
@@ -368,7 +346,6 @@ public class JavaHandler {
             }
             else
             {
-            	System.out.println("elieli not found"); 
                 myFile.createNewFile();
             }
             
@@ -439,7 +416,6 @@ public class JavaHandler {
               	.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
                    	public void onClick(DialogInterface dialog, int id) {
                    		// System.exit(0);
-                   		System.out.println("shshsh live 0");
                    		editor.putInt("live", 0);
 						editor.commit(); 
                    	}
@@ -509,7 +485,6 @@ public class JavaHandler {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        	System.out.println("fufufu: " + url);
             if(url.endsWith(".pdf")){
             	String content_path = Environment.getExternalStorageDirectory().getPath() + "/org.kalite.test/copied_kalite_content/content/";
             	String[] parts = url.split("/");
@@ -523,11 +498,6 @@ public class JavaHandler {
         		myActivity.startActivity(intent);
             	return true;
             }
-            // else if(url.equals("http://0.0.0.0:8008/securesync/logout/")){
-            // 	System.out.println("fufufu:  logout  in");
-            // 	view.loadUrl("http://0.0.0.0:8008/");
-            // 	return false;
-            // }
             else{
             	view.loadUrl(url);
             	return false;
