@@ -370,22 +370,13 @@ public class JavaHandler {
 		editor.commit(); 
 
 		progressBar = new ProgressBar(myActivity, null, android.R.attr.progressBarStyleHorizontal);
-		progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 10));
+		progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 54));
 		// retrieve the top view of our application
 		final FrameLayout decorView = (FrameLayout) myActivity.getWindow().getDecorView();
 		decorView.addView(progressBar);
 
-		String deviceName = Build.MODEL;
-		String deviceMan = Build.MANUFACTURER;
-
-		RelativeLayout rlayout=new RelativeLayout(myActivity);
-		RelativeLayout.LayoutParams rl= new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		rlayout.setLayoutParams(rl);
 		wv = new MyWebView(myActivity);
-		// wv.setScrollContainer(true);
-		// RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)wv.getLayoutParams();
-		// params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-
+		
 		WebSettings ws = wv.getSettings();
 		ws.setJavaScriptEnabled(true);
 
@@ -393,21 +384,14 @@ public class JavaHandler {
 		wv.setWebChromeClient(new MyWebChromeClient());
 		wv.setWebViewClient(new MyWebViewClient());
 		wv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-		// wv.setDrawingCacheBackgroundColor(Color.TRANSPARENT);
 
 		ws.setPluginState(WebSettings.PluginState.ON);
 
-		// ws.setDatabaseEnabled(true);
-		// ws.setDomStorageEnabled(true);
-
-		// ws.setDatabasePath("/data/data/"+myActivity.getPackageName()+"/databases/"); 
 		wv.loadUrl("http://0.0.0.0:8008/");
 		ws.setRenderPriority(WebSettings.RenderPriority.HIGH);
-		// ws.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		ws.setCacheMode(WebSettings.LOAD_NO_CACHE);
 		
-		rlayout.addView(wv, new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-        myActivity.setContentView(rlayout);
+        myActivity.setContentView(wv);
 	}
 
 	public void quitDialog(){
